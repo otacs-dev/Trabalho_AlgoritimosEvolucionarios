@@ -1,0 +1,90 @@
+~ README --> Algoritmo Genético e A* para Otimização de Rota em Mapa de Terreno ~
+
+Este projeto implementa uma solução híbrida que combina o Algoritmo A* (A-Star) para cálculo de custos de distância em um mapa complexo e o Algoritmo Genético (AG) para encontrar a rota ótima de coleta de itens (surto de Pokémon) que maximiza a razão Recompensa / Custo (um tipo de problema do Caixeiro Viajante com Recompensas).
+
+                                        Como Funciona
+
+1. Modelagem do Mapa e Custos (A*)
+
+    Mapa: Um grid 2D (50×50) é gerado aleatoriamente, representando diferentes tipos de terreno.
+
+    Custos de Movimento: Cada tipo de terreno (Planície, Água, Montanha, Floresta, Lava) possui um custo de movimento associado. Por exemplo, Lava tem um custo alto (10), enquanto Planície tem o custo padrão (1).
+
+    Algoritmo A*: O A* é utilizado para pré-calcular o custo real de viagem entre cada par de pontos de surto de Pokémon. Ele encontra o caminho de menor custo, considerando os obstáculos e custos variáveis do terreno (não apenas a distância euclidiana ou Manhattan simples).
+
+2. Otimização da Rota (Algoritmo Genético - AG)
+
+    Problema: O objetivo é encontrar a melhor sequência para visitar os 10 pontos de surto de Pokémon, retornando ao ponto inicial (similar ao Traveling Salesperson Problem - TSP).
+
+    Métrica de Fitness: A função de avaliação (fitness) busca maximizar a razão:
+    Fitness=Custo Total da RotaRecompensa Total Obtida​
+
+    Essa métrica garante que o AG priorize rotas que coletam recompensas altas, mas evitam terrenos de alto custo.
+
+    Representação: Cada indivíduo da população é uma permutação dos índices dos pontos de surto (a rota).
+
+    Operadores Genéticos:
+
+        Seleção: Utiliza o método de Torneio (seleciona o melhor entre 3 indivíduos aleatórios).
+
+        Crossover: Utiliza o Order Crossover (OX) para garantir que todos os pontos sejam visitados uma única vez (mantendo a validade da rota).
+
+        Mutação: Utiliza a Troca Simples (Swap) para introduzir diversidade.
+
+
+
+    <Resultados_e_Visualização>
+
+1. Pré-Cálculo da Matriz de Custos
+
+Antes de iniciar o AG, o A* é executado N2 vezes (onde N=10 é o número de surtos) para criar uma matriz completa de custos mínimos de viagem entre todos os pontos.
+
+2. Execução do AG
+
+    O AG é executado por um número definido de gerações (padrão: 300) com um tamanho de população (padrão: 150).
+
+    O algoritmo converge para a rota com a melhor fitness encontrada.
+
+3. Visualização (Matplotlib Animation)
+
+A simulação é apresentada em dois subplots:
+
+    Mapa de Terreno e Rota (Esquerda):
+
+        Exibe o grid colorido pelo tipo de terreno e seu custo (ver legenda).
+
+        Os pontos de surto são marcados com Pokébolas (ou círculos) e sua recompensa (R: valor).
+
+        O algoritmo A* é executado novamente sobre a rota final para gerar o caminho detalhado, que é animado (mostrando o "Ash" percorrendo o caminho).
+
+        Um Custo Atual é exibido dinamicamente no mapa conforme o caminho é percorrido.
+
+    Evolução da Fitness (Direita):
+
+        Um gráfico de linha mostra o melhor valor de Fitness encontrado em cada geração do Algoritmo Genético, demonstrando a convergência.
+
+4. Tabela Final de Pontuação
+
+Após a animação, uma tabela é impressa no console, apresentando as métricas finais da rota otimizada:
+
+    Rota (sequência dos pontos).
+
+    Recompensa Total.
+
+    Custo Ótimo (calculado pela AG e confirmado pela simulação A*).
+
+    Fitness Máxima alcançada.
+
+🛠️ Requisitos e Execução
+
+Dependências
+
+É necessário ter as seguintes bibliotecas Python instaladas:
+
+    numpy
+
+    random
+
+    heapq
+
+    matplotlib
